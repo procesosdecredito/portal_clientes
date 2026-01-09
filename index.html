@@ -1,0 +1,252 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Portal Cliente</title>
+    <script crossorigin src="https://unpkg.com/react@18/umd/react.production.min.js"></script>
+    <script crossorigin src="https://unpkg.com/react-dom@18/umd/react-dom.production.min.js"></script>
+    <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+    <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body>
+    <div id="root"></div>
+    <script type="text/babel">
+        const { useState } = React;
+
+        // Iconos de Lucide (simplificados como SVG)
+        const DollarSign = ({ size = 24, className = "" }) => (
+            <svg width={size} height={size} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className={className}>
+                <line x1="12" y1="1" x2="12" y2="23"></line>
+                <path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"></path>
+            </svg>
+        );
+
+        const Calendar = ({ size = 24, className = "" }) => (
+            <svg width={size} height={size} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className={className}>
+                <rect x="3" y="4" width="18" height="18" rx="2" ry="2"></rect>
+                <line x1="16" y1="2" x2="16" y2="6"></line>
+                <line x1="8" y1="2" x2="8" y2="6"></line>
+                <line x1="3" y1="10" x2="21" y2="10"></line>
+            </svg>
+        );
+
+        const FileText = ({ size = 24, className = "" }) => (
+            <svg width={size} height={size} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className={className}>
+                <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path>
+                <polyline points="14 2 14 8 20 8"></polyline>
+                <line x1="16" y1="13" x2="8" y2="13"></line>
+                <line x1="16" y1="17" x2="8" y2="17"></line>
+                <polyline points="10 9 9 9 8 9"></polyline>
+            </svg>
+        );
+
+        const User = ({ size = 24, className = "" }) => (
+            <svg width={size} height={size} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className={className}>
+                <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path>
+                <circle cx="12" cy="7" r="4"></circle>
+            </svg>
+        );
+
+        const Lock = ({ size = 24, className = "" }) => (
+            <svg width={size} height={size} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className={className}>
+                <rect x="3" y="11" width="18" height="11" rx="2" ry="2"></rect>
+                <path d="M7 11V7a5 5 0 0 1 10 0v4"></path>
+            </svg>
+        );
+
+        const CheckCircle = ({ size = 24, className = "" }) => (
+            <svg width={size} height={size} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className={className}>
+                <path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"></path>
+                <polyline points="22 4 12 14.01 9 11.01"></polyline>
+            </svg>
+        );
+
+        function DispersionPlatform() {
+            const [isLoggedIn, setIsLoggedIn] = useState(false);
+            const [loginData, setLoginData] = useState({ user: '8702265', password: '8547654' });
+
+            // Información de dispersión del cliente
+            const dispersionInfo = {
+                clientName: "Marisa Escalante Salinas"
+                contractNumber: "DISP-2026-8702265",
+                amountToDisperse: 996742117,
+                dispersionDate: "2026-01-12",
+                status: "Autorización Pendiente",
+                concept: "Devolución",
+                accountNumber: "****01961",
+                bank: "BBVA Bancomer S.A."
+            };
+
+            const handleLogin = (e) => {
+                e.preventDefault();
+                if (loginData.user && loginData.password) {
+                    setIsLoggedIn(true);
+                }
+            };
+
+            const formatCurrency = (amount) => {
+                return new Intl.NumberFormat('es-MX', {
+                    style: 'currency',
+                    currency: 'MXN'
+                }).format(amount);
+            };
+
+            if (!isLoggedIn) {
+                return (
+                    <div className="min-h-screen bg-gradient-to-br from-blue-50 to-indigo-100 flex items-center justify-center p-4">
+                        <div className="bg-white rounded-2xl shadow-2xl p-8 w-full max-w-md">
+                            <div className="text-center mb-8">
+                                <div className="bg-indigo-600 w-16 h-16 rounded-full flex items-center justify-center mx-auto mb-4">
+                                    <Lock size={32} className="text-white" />
+                                </div>
+                                <h1 className="text-3xl font-bold text-gray-800">Portal Cliente</h1>
+                                <p className="text-gray-600 mt-2">Ingresa tus credenciales</p>
+                            </div>
+                            
+                            <div className="space-y-6">
+                                <div>
+                                    <label className="block text-sm font-medium text-gray-700 mb-2">
+                                        Usuario
+                                    </label>
+                                    <div className="relative">
+                                        <User className="absolute left-3 top-3 text-gray-400" size={20} />
+                                        <input
+                                            type="text"
+                                            value={loginData.user}
+                                            onChange={(e) => setLoginData({...loginData, user: e.target.value})}
+                                            onKeyPress={(e) => e.key === 'Enter' && handleLogin(e)}
+                                            className="w-full pl-10 pr-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-transparent"
+                                            placeholder="tu.usuario"
+                                        />
+                                    </div>
+                                </div>
+                                
+                                <div>
+                                    <label className="block text-sm font-medium text-gray-700 mb-2">
+                                        Contraseña
+                                    </label>
+                                    <div className="relative">
+                                        <Lock className="absolute left-3 top-3 text-gray-400" size={20} />
+                                        <input
+                                            type="password"
+                                            value={loginData.password}
+                                            onChange={(e) => setLoginData({...loginData, password: e.target.value})}
+                                            onKeyPress={(e) => e.key === 'Enter' && handleLogin(e)}
+                                            className="w-full pl-10 pr-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-transparent"
+                                            placeholder="••••••••"
+                                        />
+                                    </div>
+                                </div>
+                                
+                                <button
+                                    onClick={handleLogin}
+                                    className="w-full bg-indigo-600 text-white py-3 rounded-lg font-semibold hover:bg-indigo-700 transition duration-200 shadow-lg"
+                                >
+                                    Iniciar Sesión
+                                </button>
+                            </div>
+                            
+                            <p className="text-center text-sm text-gray-500 mt-6">
+                                ¿Olvidaste tu contraseña? <a href="#" className="text-indigo-600 hover:underline">Recuperar</a>
+                            </p>
+                        </div>
+                    </div>
+                );
+            }
+
+            return (
+                <div className="min-h-screen bg-gradient-to-br from-blue-50 to-indigo-100 p-4 md:p-8">
+                    <div className="max-w-4xl mx-auto">
+                        <div className="bg-white rounded-2xl shadow-lg p-6 mb-6">
+                            <div className="flex justify-between items-center">
+                                <div>
+                                    <h1 className="text-3xl font-bold text-gray-800">Bienvenida, {dispersionInfo.clientName}</h1>
+                                    <p className="text-gray-600 mt-1">Folio: {dispersionInfo.contractNumber}</p>
+                                </div>
+                                <button
+                                    onClick={() => setIsLoggedIn(false)}
+                                    className="px-4 py-2 bg-red-500 text-white rounded-lg hover:bg-red-600 transition"
+                                >
+                                    Cerrar Sesión
+                                </button>
+                            </div>
+                        </div>
+
+                        <div className="bg-gradient-to-br from-indigo-500 to-indigo-600 rounded-2xl shadow-xl p-8 mb-6 text-white">
+                            <div className="flex items-center justify-between mb-6">
+                                <h2 className="text-2xl font-bold">Monto a Dispersar</h2>
+                                <CheckCircle size={25} className="text-green-300" />
+                            </div>
+                            <div className="text-center">
+                                <p className="text-6xl font-bold mb-2">{formatCurrency(dispersionInfo.amountToDisperse)}</p>
+                                <p className="text-lg opacity-90">Monto total autorizado</p>
+                            </div>
+                        </div>
+
+                        <div className="bg-white rounded-2xl shadow-lg p-8 mb-6">
+                            <h2 className="text-2xl font-bold text-gray-800 mb-6 flex items-center">
+                                <FileText className="mr-3 text-indigo-600" size={28} />
+                                Detalles de la Dispersión
+                            </h2>
+                            
+                            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                                <div className="border-l-4 border-indigo-500 pl-4">
+                                    <p className="text-sm text-gray-600 mb-1">Concepto</p>
+                                    <p className="text-lg font-semibold text-gray-800">{dispersionInfo.concept}</p>
+                                </div>
+                                
+                                <div className="border-l-4 border-green-500 pl-4">
+                                    <p className="text-sm text-gray-600 mb-1">Estado</p>
+                                    <span className="inline-block px-4 py-2 bg-green-100 text-green-800 rounded-lg font-semibold">
+                                        {dispersionInfo.status}
+                                    </span>
+                                </div>
+                                
+                                <div className="border-l-4 border-purple-500 pl-4">
+                                    <p className="text-sm text-gray-600 mb-1">Fecha de Dispersión</p>
+                                    <p className="text-lg font-semibold text-gray-800 flex items-center">
+                                        <Calendar className="mr-2 text-purple-500" size={20} />
+                                        {dispersionInfo.dispersionDate}
+                                    </p>
+                                </div>
+                                
+                                <div className="border-l-4 border-orange-500 pl-4">
+                                    <p className="text-sm text-gray-600 mb-1">Folio del Contrato</p>
+                                    <p className="text-lg font-semibold text-gray-800">{dispersionInfo.contractNumber}</p>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div className="bg-white rounded-2xl shadow-lg p-8">
+                            <h2 className="text-2xl font-bold text-gray-800 mb-6 flex items-center">
+                                <DollarSign className="mr-3 text-indigo-600" size={28} />
+                                Cuenta de Depósito
+                            </h2>
+                            
+                            <div className="bg-gradient-to-r from-gray-700 to-gray-900 rounded-xl p-6 text-white">
+                                <div className="mb-4">
+                                    <p className="text-sm opacity-75 mb-1">Banco</p>
+                                    <p className="text-2xl font-bold">{dispersionInfo.bank}</p>
+                                </div>
+                                <div>
+                                    <p className="text-sm opacity-75 mb-1">Número de Cuenta</p>
+                                    <p className="text-xl font-mono tracking-wider">{dispersionInfo.accountNumber}</p>
+                                </div>
+                            </div>
+
+                            <div className="mt-6 bg-blue-50 border-l-4 border-blue-500 p-4 rounded">
+                                <p className="text-sm text-blue-800">
+                                    <strong>Nota:</strong> Proceso pendiente de liquidación. Para acceder de manera inmediata a la transferencia favor de cubrir el monto restante por $14,281.90.
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            );
+        }
+
+        ReactDOM.render(<DispersionPlatform />, document.getElementById('root'));
+    </script>
+</body>
+</html>
